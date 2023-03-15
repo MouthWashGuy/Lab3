@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        loadBook();
+        //loadBook();
         Log.i("lab3", "onStart");
     }
 
@@ -52,25 +52,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-
         super.onSaveInstanceState(outState); // saves all view data to the bundle
+
+        EditText titleText = findViewById(R.id.editTextTextPersonName3);
+        EditText ISBNText = findViewById(R.id.editTextTextPersonName6);
+
+        outState.putString("title", titleText.getText().toString());
+        outState.putString("isbn", ISBNText.getText().toString());
+
         Log.i("lab3", "onSaveInstanceState");
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 
-        super.onRestoreInstanceState(savedInstanceState); // restore all view data
+//        super.onRestoreInstanceState(savedInstanceState); // restore all view data
+//
+//        EditText bookIdText = findViewById(R.id.editTextTextPersonName1); // since we don't care about the other fields, delete them
+//        EditText authorText = findViewById(R.id.editTextTextPersonName5);
+//        EditText descriptionText = findViewById(R.id.editTextTextPersonName4);
+//        EditText priceText = findViewById(R.id.editTextTextPersonName2);
+//
+//        bookIdText.getText().clear();
+//        authorText.getText().clear();
+//        descriptionText.getText().clear();
+//        priceText.getText().clear();
 
-        EditText bookIdText = findViewById(R.id.editTextTextPersonName1); // since we don't care about the other fields, delete them
-        EditText authorText = findViewById(R.id.editTextTextPersonName5);
-        EditText descriptionText = findViewById(R.id.editTextTextPersonName4);
-        EditText priceText = findViewById(R.id.editTextTextPersonName2);
+        EditText titleText = findViewById(R.id.editTextTextPersonName3);
+        EditText ISBNText = findViewById(R.id.editTextTextPersonName6);
 
-        bookIdText.getText().clear();
-        authorText.getText().clear();
-        descriptionText.getText().clear();
-        priceText.getText().clear();
+        titleText.setText(savedInstanceState.getString("title", ""));
+        ISBNText.setText(savedInstanceState.getString("isbn", ""));
 
         Log.i("lab3", "onRestoreInstanceState");
     }
@@ -105,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
         // creating the toast object and message
         Toast myMessage = Toast.makeText(this, String.format("Book (%s) and the price (%.2f)", title, price), Toast.LENGTH_LONG);
         myMessage.show(); // actually displaying the message
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////
+        // LAB 3                                                                                      //
+        ///////////////////////////////////////////////////////////////////////////////////////////////
 
         // now we can save all of the data into a shared pref object to persist it
         SharedPreferences myBook = getSharedPreferences("book", 0); // create shared pref
@@ -163,5 +179,16 @@ public class MainActivity extends AppCompatActivity {
         authorText.setText(myBook.getString("author", ""));
         descriptionText.setText(myBook.getString("description", ""));
         priceText.setText(myBook.getString("price", ""));
+    }
+
+    public void isbnButton(View view) {
+
+        // create shared pref
+        SharedPreferences myBook = getSharedPreferences("book", 0);
+        SharedPreferences.Editor myEditor = myBook.edit(); // create editor obj
+
+        myEditor.putString("isbn", "00112233");
+
+        myEditor.apply(); // apply the changes
     }
 }
